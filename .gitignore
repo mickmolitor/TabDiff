@@ -2,8 +2,7 @@
 *.pyc
 
 data/*
-!/data/Info/
-
+data/
 wandb/
 eval/
 synthetic/
