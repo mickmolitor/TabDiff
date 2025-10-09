@@ -1,0 +1,40 @@
+[project]
+name = "tabdiff"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "category-encoders>=2.8.1",
+    "datasets>=4.1.1",
+    "icecream>=2.1.8",
+    "imbalanced-learn>=0.14.0",
+    "kaggle>=1.7.4.5",
+    "kaleido>=1.1.0",
+    "ml-collections>=1.1.0",
+    "numpy",
+    "openpyxl>=3.1.5",
+    "pandas>=2.3.3",
+    "peft==0.9.0",
+    "pip>=25.2",
+    "prdc>=0.2",
+    "rdt>=1.13.2",
+    "scikit-learn>=1.7.2",
+    "scipy>=1.15.3",
+    "sdmetrics>=0.18.0",
+    "sdv==1.27.0",
+    "tomli==2.0.1",
+    "tomli-w>=1.2.0",
+    "torchvision",
+    "transformers>=4.57.0",
+    "wandb==0.17.3",
+    "xgboost>=3.0.5",
+    "xlrd>=2.0.2",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.30.1",
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
