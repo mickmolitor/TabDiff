@@ -327,7 +327,7 @@ class TabDiffGeneration(ModelBase):
 
     def _custom_preprocess(self, dataset_path, y_only=False, dequant_dist='none', int_dequant_factor=0.0, task_type='regression'):
         """Custom preprocessing function that uses concat=False to avoid feature mismatch"""
-        from utils_train import preprocess
+        from tabdiff.utils.utils_train import preprocess
         
         # Call preprocess with concat=False to prevent target concatenation
         return preprocess(

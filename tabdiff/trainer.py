@@ -9,7 +9,7 @@ import json
 
 from copy import deepcopy
 
-from utils_train import update_ema
+# from utils_train import update_ema
 
 from tqdm import tqdm
 
@@ -252,7 +252,7 @@ class Trainer:
             # Save the best ema ckpt
             if ema_total_loss < best_ema_loss and self.curr_epoch > 4000:
                 best_ema_loss = ema_total_loss
-                to_remove = glob.glob(os.path.join(self.model_save_path, f"best_ema_model_*"))
+                to_remove = glob.glob(os.path.join(self.model_save_path, "best_ema_model_*"))
                 if to_remove:
                     os.remove(to_remove[0])
                 state_dicts = {
@@ -402,3 +402,14 @@ def recover_data(syn_num, syn_cat, syn_target, info):
                 syn_df[i] = syn_target[:, idx_mapping[i] - len(num_col_idx) - len(cat_col_idx)]
 
     return syn_df
+
+def update_ema(target_params, source_params, rate=0.999):
+    """
+    Update target parameters to be closer to those of source parameters using
+    an exponential moving average.
+    :param target_params: the target parameter sequence.
+    :param source_params: the source parameter sequence.
+    :param rate: the EMA rate (closer to 1 means slower).
+    """
+    for target, source in zip(target_params, source_params):
+        target.detach().mul_(rate).add_(source.detach(), alpha=1 - rate)
