@@ -36,8 +36,10 @@ class Trainer:
             device=torch.device('cuda:1'),
             ckpt_path = None,
             y_only=False,
+            verbose=True,
             **kwargs
     ):
+        self.verbose = verbose
         self.y_only = y_only
         self.diffusion = diffusion
         self.ema_model = deepcopy(self.diffusion._denoise_fn)
@@ -127,18 +129,19 @@ class Trainer:
         best_ema_loss = np.inf
         best_val_loss = np.inf
         start_time = time.time()
-        print_with_bar(f"Starting Trainin Loop, total number of epoch = {self.steps}")
+        if self.verbose:
+            print_with_bar(f"Starting Trainin Loop, total number of epoch = {self.steps}")
         # Set up wandb's step metric
         self.logger.define_metric("epoch")
         self.logger.define_metric("*", step_metric="epoch")
         
         start_epoch = self.curr_epoch
-        if start_epoch > 0:
+        if start_epoch > 0 and self.verbose:
             print_with_bar(f"Resuming training from epoch {start_epoch}, with validation check every {self.check_val_every} epoches")
         for epoch in range (start_epoch, self.steps):
             self.curr_epoch = epoch+1
             # Set up pbar
-            pbar = tqdm(self.train_iter, total=len(self.train_iter))
+            pbar = tqdm(self.train_iter, total=len(self.train_iter), disable=not self.verbose)
             pbar.set_description(f"Epoch {epoch+1}/{self.steps}")
             
             # Compute the loss weights
@@ -263,13 +266,15 @@ class Trainer:
                 torch.save(state_dicts, os.path.join(self.model_save_path, f'best_ema_model_{np.round(ema_total_loss,4)}_{epoch+1}.pt'))
             
             # Submit logs
-            self.logger.log(log_dict)
+            if self.verbose:
+                self.logger.log(log_dict)
 
         end_time = time.time()
-        print_with_bar(f"Ending Trainnig Loop, totoal training time = {end_time - start_time}")
-        self.logger.log({
-            'training_time': end_time - start_time
-        })
+        if self.verbose:
+            print_with_bar(f"Ending Trainnig Loop, totoal training time = {end_time - start_time}")
+            self.logger.log({
+                'training_time': end_time - start_time
+            })
 
     def sample_synthetic(self, num_samples, keep_nan_samples=True, ema=False):
         if ema:

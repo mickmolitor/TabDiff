@@ -37,6 +37,7 @@ class TabDiffParameters:
     """
 
     # Model architecture parameters
+    verbose: bool = False
     num_layers: int = 2
     d_token: int = 4
     n_head: int = 1
@@ -339,6 +340,7 @@ class TabDiffGeneration(ModelBase):
             result_save_path=None,
             device=self.device,
             ema_decay=self.parameters.ema_decay,
+            verbose=self.parameters.verbose,
         )
 
         self.trainer.run_loop()
