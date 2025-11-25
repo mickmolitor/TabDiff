@@ -198,7 +198,7 @@ class UnifiedCtimeDiffusion(torch.nn.Module):
                 len(self.num_classes),
             )
         
-        pbar = tqdm(reversed(range(0, self.num_timesteps)), total=self.num_timesteps)
+        pbar = tqdm(reversed(range(0, self.num_timesteps)), total=self.num_timesteps, disable=True)
         pbar.set_description(f"Sampling Progress")
         for i in pbar:                  
             z_norm, z_cat, q_xs = self.edm_update(
@@ -218,7 +218,7 @@ class UnifiedCtimeDiffusion(torch.nn.Module):
         all_samples = []
         num_generated = 0
         while num_generated < num_samples:
-            print(f"Samples left to generate: {num_samples-num_generated}")
+            # print(f"Samples left to generate: {num_samples-num_generated}")
             sample = self.sample(b)
             mask_nan = torch.any(sample.isnan(), dim=1)
             if keep_nan_samples:
@@ -563,7 +563,7 @@ class UnifiedCtimeDiffusion(torch.nn.Module):
             elif impute_condition == "x_0":
                 z_cat = x_cat
         
-        pbar = tqdm(reversed(range(0, self.num_timesteps)), total=self.num_timesteps)
+        pbar = tqdm(reversed(range(0, self.num_timesteps)), total=self.num_timesteps, disable=True)
         pbar.set_description(f"Sampling Progress")
         for i in pbar:
             for u in range (resample_rounds):
